@@ -7,3 +7,7 @@ The website does this:
   - Displays data using graphs (http://www.highcharts.com/);
   - Logs the user behaviour (which buttons are clicked & when they are clicked & by whom they are clicked);
   - Uses AWS-S3 to store all the data files and logs;
+
+PrintScreen:
+
+![Alt text](printscreen.png?raw=true "Printscreen")
