@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<head>
+   <title>Can you beat a theoretical neuroscientist?</title>
+   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+   <script src="https://code.highcharts.com/highcharts.js"></script>
+   <script src="https://code.highcharts.com/modules/boost.js"></script>
+   <script src="https://code.highcharts.com/modules/data.js"></script>
+   <script src="https://code.highcharts.com/modules/exporting.js"></script>
+   <style type="text/css">
+   header, section, footer, aside, nav, article, figure, audio, video, canvas  { display:block; }
+   </style>
+   {% load staticfiles %}   
+   <script src="{% static "jquery-ui-slider-pips.js" %}"></script>
+   <link rel="stylesheet" href="{% static "jquery-ui-slider-pips.css" %}">
+   
+   <script src="{% static "viewConfiguration.js" %}"></script>
+   <script src="{% static "charts.js" %}"></script>
+   <script src="{% static "highscores.js" %}"></script>
+   <script src="{% static "awsUtils.js" %}"></script>
+   <script src="{% static "game.js" %}"></script>
+   <script src="{% static "view.js" %}"></script>
+
+   <link rel="stylesheet" href="{% static "style.css" %}">
+
+   <meta name="viewport" content="width=725"/>
+</head>
+<body onload="Charts.initHighCharts(); View.viewOnLoad(); Game.newGame(1);">
+   
+   <div class="screen">
+
+
+   <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+         <span class="close">x</span>
+         <p>Link to the paper, and (maybe a button with tweet this)</p>
+      </div>
+   </div>
+
+   <button class="ui-button ui-widget ui-corner-all" id="modalBtn" style=" float:right; width:51px; height:26px;">Help</button>
+
+
+   <div style="width: 600px; font-family: Arial Narrow, Arial, sans-serif; font-size:140%;  margin:0px 10px 20px 10px; color:#000080; ">
+        <b>Can you beat a theoretical neuroscientist?</b>     
+   </div> 
+
+     
+
+      <div class="left_panel"> 
+
+         <div class="knob_row"> 
+            <div class="knob_label"> 
+               <font color="#996699"><b>Adaptation</b></font>
+            </div>   
+            <div class="knob_buttns">
+               <input type='button' value='-' class='ui-button ui-widget ui-corner-all qtyminus knobs' id="knob1_minus" />
+               <input type='text'  id='knob1' value='7' class='qty' disabled/>
+               <input type='button' value='+' class='ui-button ui-widget ui-corner-all qtyplus knobs' id="knob1_plus" />
+            </div>
+         </div>
+
+         <div class="knob_row"> 
+            <div class="knob_label"> 
+               <font color="#000080"><b>Inhibition</b></font>
+            </div>
+            <div class="knob_buttns">
+               <input type='button' value='-' class='ui-button ui-widget ui-corner-all qtyminus knobs' id="knob2_minus" />
+               <input type='text'  id='knob2' value='7' class='qty' disabled/>
+               <input type='button' value='+' class='ui-button ui-widget ui-corner-all qtyplus knobs' id="knob2_plus" />
+            </div>               
+         </div>
+
+         <div class="knob_row"> 
+            <div class="knob_label"> 
+               <font color="#FF4D4D"><b>Excitation</b></font>
+            </div>
+            <div class="knob_buttns">               
+               <input type='button' value='-' class='ui-button ui-widget ui-corner-all qtyminus knobs' id="knob3_minus"  />
+               <input type='text'  id='knob3' value='7' class='qty' disabled/>
+               <input type='button' value='+' class='ui-button ui-widget ui-corner-all qtyplus knobs' id="knob3_plus" />
+            </div>               
+         </div> 
+
+         <div class="knob_row"> 
+            <div class="knob_label"> 
+               <font color="#8080CC"><b>Tonic input baseline</b></font>
+            </div>
+            <div class="knob_buttns">               
+               <input type='button' value='-' class='ui-button ui-widget ui-corner-all qtyminus knobs' id="knob4_minus"  />
+               <input type='text'  id='knob4' value='7' class='qty' disabled/>
+               <input type='button' value='+' class='ui-button ui-widget ui-corner-all qtyplus knobs' id="knob4_plus" />
+            </div>               
+         </div>            
+
+         <div class="knob_row"> 
+            <div class="knob_label"> 
+               <font color="#CC00CC"><b>Tonic input spread</b></font>
+            </div>
+            <div class="knob_buttns">               
+               <input type='button' value='-' class='ui-button ui-widget ui-corner-all qtyminus knobs' id="knob5_minus"  />
+               <input type='text'  id='knob5' value='7' class='qty' disabled/>
+               <input type='button' value='+' class='ui-button ui-widget ui-corner-all qtyplus knobs' id="knob5_plus" />
+            </div>               
+         </div>
+      </div>
+
+      <div style="float:left; width: 345px; height: 35px; ">
+        <div style="float:left;  font-size:20px; padding-right: 3px;">Current score:</div>
+        <div id="score":  style="color:blue; float:left; font-size:20px; padding-right: 7px;">100</div>
+
+        <div style="float:left; padding-right: 3px; font-size:20px">Best so far:</div>
+
+        <button class="ui-button ui-widget ui-corner-all" id="bestScore" onclick="Game.jumpToBestCombinationFoundSoFar()" style="color:blue; float:left; width: 70px; padding-right: 50px;">100</button>
+      </div>
+
+
+<div class="middle_panel"> 
+   <button id="simulateB" class="ui-button ui-widget ui-corner-all knobs" 
+      onclick="Game.changeCombination()" style="width: 144px; font-size: 100%; margin-top: 5px; margin-bottom: 10px; padding-top:5px; padding-bottom:5px;">Simulate! [enter]</button>
+
+   <div> 
+      <button class="ui-button ui-widget ui-corner-all" onclick="Game.newGame(document.getElementById('target').value)" style="float: left; height:53px; width: 65px;">New Game</button> 
+      <div class="ui-widget ui-corner-all" style="float: left; height 65px; width: 75px; border: 1px solid #c5c5c5;">
+         <div style="margin: 3px;"> Dataset:</div>
+         <input type="number" id="target" min="1" max="57" value="1" style=" height:20px; width: 69px; padding-left:1px; padding-right:1px;" >
+      </div>
+   </div>
+
+   <div id="finishGame">
+      <button id="finishGameB" class="ui-button ui-widget ui-corner-all" onclick="Game.finishGame()" style="margin-top: 10px; width: 144px; font-size: 100%; ">Finish Game</button>
+   </div>
+
+   <div id="showBestFit">
+      <button id="showBestFitB" class="ui-button ui-widget ui-corner-all" onclick="Game.showBestFit()" style="font-size: 100%; width: 144px; margin-top: 10px;">Show best fit?</button>
+   </div>
+</div>
+
+   <div class="right_panel" id="right_panel">
+      <div id="nicknamePanel">
+         <div id="nickname_text">You have a highscore! Nickname:</div>
+            <input type="text" id="nickname_input" value="nickname"><br>
+            <button class="ui-button ui-widget ui-corner-all" onclick="Game.submitNickname(document.getElementById('nickname_input').value)" id="nickname_button">Submit</button>               
+      </div>
+
+      <div id="highscoresPanel">
+         <div style="font-size:20px;">HighScores:</div>
+         <div id="highscoresTable"></div>
+      </div>     
+
+      <div id="bestFitPanel">
+         <br/><br/><br/><br/> 
+         <font color="red" size="4"> 
+            The <i>algorithm</i> found this solution in 
+            <font size="5"> 
+               <div id="bestFitValue" style="display: inline-block;"> </div> 
+            </font> 
+            steps
+         </font>
+      </div>                   
+   </div>
+
+
+      <div class="right_rasters">
+         <div id="raster_variable"></div>         
+         <div id="raster_fixed"></div>
+      </div>
+      <div class="left_rasters">
+         <div id="squares">
+            <div id="raster_line_MUA"></div>
+            <div id="raster_line_AC"></div>
+         </div>
+         <div id="raster_point"></div>
+      </div>
+      <!-- firing rate not physiologically plausible -->
+      <div class="float_left">
+         <h1 id="result"></h1>
+      </button>
+   </div>
+</div>
+</body>
+</html>
